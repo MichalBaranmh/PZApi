@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PZApi", "PZApi.csproj", "{686600B2-BD9C-42E9-9B40-B260654E8265}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{686600B2-BD9C-42E9-9B40-B260654E8265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{686600B2-BD9C-42E9-9B40-B260654E8265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{686600B2-BD9C-42E9-9B40-B260654E8265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{686600B2-BD9C-42E9-9B40-B260654E8265}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F8A33DE9-15DA-4F45-901A-9DDD6862E164}
+	EndGlobalSection
+EndGlobal
