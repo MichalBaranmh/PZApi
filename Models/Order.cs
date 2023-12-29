@@ -14,7 +14,6 @@ namespace PZApi.Models
 
         //Customer musi istniec do stworzenie orderu
         public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
-        public ICollection<Part> Parts { get; set; }
+        public ICollection<Part> Parts { get; }= new List<Part>();
     }
 }

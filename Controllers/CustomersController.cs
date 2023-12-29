@@ -9,10 +9,10 @@ namespace PZApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class CustomersController : ControllerBase
     {
         private readonly CarServiceConext _context;
-        public CustomerController(CarServiceConext context)
+        public CustomersController(CarServiceConext context)
         {
             _context = context;
         }
