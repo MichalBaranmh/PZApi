@@ -13,7 +13,6 @@ namespace PZApi.Models
         public string LastName { get; set; }
         public DateTime CreationDate { get; set; }
 
-        public int OrderId { get; set; }
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<Order> Orders { get; } = new List<Order>();
     }
 }

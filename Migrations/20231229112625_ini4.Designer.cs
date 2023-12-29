@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PZApi.Models;
@@ -11,9 +12,11 @@ using PZApi.Models;
 namespace PZApi.Migrations
 {
     [DbContext(typeof(CarServiceConext))]
-    partial class CarServiceConextModelSnapshot : ModelSnapshot
+    [Migration("20231229112625_ini4")]
+    partial class ini4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
