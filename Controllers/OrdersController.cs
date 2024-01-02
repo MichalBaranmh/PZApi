@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PZApi.DTO;
 using PZApi.Models;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -42,7 +44,28 @@ namespace PZApi.Controllers
 
             return Ok(order);
         }
-        
+
+        [HttpGet("getparts/{orderId}")]
+        public async Task<ActionResult<IEnumerable<Part>>> GetPartsByOrderId(int orderId)
+        {
+            var parts = await _context.Parts
+                .Where(part => part.OrderID == orderId)
+                .ToListAsync();
+
+            if (parts == null || !parts.Any())
+            {
+                return NotFound("Parts not found");
+            }
+
+            var jsonSettings = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+            };
+            var jsonResult = JsonSerializer.Serialize(parts, jsonSettings); //Returns order with its parts
+
+            return Ok(jsonResult);
+        }
+
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] OrderDto orderDto)
         {
