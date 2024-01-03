@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using PZApi.DTO;
 using PZApi.Models;
-using System.Text.Json.Serialization;
-using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,7 +29,7 @@ namespace PZApi.Controllers
             return Ok(customers);
 
         }
-        //Get Customer by CustomerID
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Part>> GetCustomerById(int id)
         {
@@ -39,32 +37,10 @@ namespace PZApi.Controllers
 
             if (customer == null)
             {
-                return NotFound("Customer not found");
+                return NotFound();
             }
 
             return Ok(customer);
-        }
-
-        [HttpGet("getorders/{customerId}")]
-        public async Task<ActionResult<IEnumerable<Part>>> GetOrdersByCustomerId(int customerId)
-        {
-
-            var orders = await _context.Orders
-                .Where(order => order.CustomerId == customerId)
-                .ToListAsync();
-
-            if (orders == null || !orders.Any())
-            {
-                return NotFound("No orders found");
-            }
-
-            var jsonSettings = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve,
-            };
-            var jsonResult = JsonSerializer.Serialize(orders, jsonSettings); //Returns order with its parts
-
-            return Ok(jsonResult);
         }
 
         [HttpPost]
@@ -103,5 +79,44 @@ namespace PZApi.Controllers
             return NoContent();
         }
 
+        //Update Customer Orders
+        [HttpPatch("updateorder")]
+        public async Task<ActionResult> UpdateOrderForPart([FromBody] UpdateOrderDto updateOrderDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var existingCustomer = await _context.Customers.FindAsync(updateOrderDto.CustomerId);
+
+            if (existingCustomer == null)
+            {
+                return NotFound(); // Return 404 if the customer with specified ID is not found
+            }
+
+            // Update customer orders
+            if (updateOrderDto.OrderId.HasValue)
+            {
+                var order = await _context.Orders.FindAsync(updateOrderDto.OrderId.Value);
+
+                if (order != null)
+                {
+                    existingCustomer.Orders.Add(order);
+
+                    await _context.SaveChangesAsync();
+
+                    return Ok(existingCustomer); // Return the updated part
+                }
+                else
+                {
+                    return BadRequest("Invalid OrderID"); // Return 400 if the OrderID is invalid
+                }
+            }
+            else
+            {
+                return BadRequest("OrderID is required"); // Return 400 if OrderID is not provided
+            }
+        }
     }
 }
