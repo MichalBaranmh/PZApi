@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using PZApi.DTO;
 using PZApi.Models;
+using static NuGet.Packaging.PackagingConstants;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,7 +34,7 @@ namespace PZApi.Controllers
         }
         
         [HttpGet("{id}")]
-        public async Task<ActionResult<Part>> GetOrderById(int id)
+        public async Task<ActionResult<Order>> GetOrderById(int id)
         {
             var order = await _context.Orders.FindAsync(id);
 
@@ -42,7 +45,29 @@ namespace PZApi.Controllers
 
             return Ok(order);
         }
-        
+
+        [HttpGet("getcustomerorder")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetCustomerOrder(int customerId)
+        {
+            var customerOrders = await _context.Orders
+                .Where(o => o.CustomerId == customerId)
+                .Include(o => o.Parts)
+                .ToListAsync();
+
+            if (customerOrders == null || customerOrders.Count == 0)
+            {
+                return NotFound($"No orders found for customer with ID {customerId}");
+            }
+
+            var jsonSettings = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+            };
+            var jsonResult = JsonSerializer.Serialize(customerOrders, jsonSettings); //Returns order with its parts
+
+            return Ok(jsonResult);
+        }
+
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] OrderDto orderDto)
         {
