@@ -68,6 +68,22 @@ namespace PZApi.Controllers
             return Ok(jsonResult);
         }
 
+        [HttpGet("getordersforday")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersForDay(DateTime orderDate)
+        {
+            // Find all orders for the provided day
+            var ordersForDay = await _context.Orders
+                .Where(o => o.OrderDate.Date == orderDate.Date)
+                .ToListAsync();
+
+            if (ordersForDay == null || ordersForDay.Count == 0)
+            {
+                return NotFound($"No orders found for the provided day: {orderDate.ToShortDateString()}");
+            }
+
+            return Ok(ordersForDay);
+        }
+
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] OrderDto orderDto)
         {
@@ -86,6 +102,7 @@ namespace PZApi.Controllers
                 ServiceName = orderDto.ServiceName,
                 ServicePrice = orderDto.ServicePrice,
                 CustomerId = orderDto.CustomerId,
+                OrderDate = orderDto.OrderDate
             };
 
             _context.Orders.Add(newOrder);

@@ -15,10 +15,6 @@ namespace PZApi.Models
                 .Property(p => p.shipmentDate)
                 .HasDefaultValueSql("now()");
 
-            modelBuilder.Entity<Order>()
-                .Property(p => p.OrderDate)
-                .HasDefaultValueSql("now()");
-
             modelBuilder.Entity<Customer>()
                 .Property(p => p.CreationDate)
                 .HasDefaultValueSql("now()");
